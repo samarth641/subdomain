@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Subdomain Form</title>
+</head>
+
+<body>
+    <h1>Create Subdomain</h1>
+    <form id="subdomain-form">
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required><br><br>
+
+        <label for="domain">Domain:</label>
+        <input type="text" id="domain" name="domain" required><br><br>
+
+        <button type="submit">Create Subdomain</button>
+    </form>
+
+    <div id="response"></div>
+
+    <script>
+        const form = document.getElementById('subdomain-form');
+        const responseDiv = document.getElementById('response');
+
+        form.addEventListener('submit', async function (event) {
+            event.preventDefault();
+
+            const formData = new FormData(form);
+            const data = {};
+            formData.forEach((value, key) => {
+                data[key] = value;
+            });
+
+            try {
+                const response = await fetch('/create', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                const result = await response.json();
+                responseDiv.textContent = result.message;
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        });
+    </script>
+</body>
+
+</html>
